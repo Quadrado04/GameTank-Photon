@@ -25,7 +25,7 @@ public class Weapons : MonoBehaviour
 				GameObject ob=(GameObject)
 					PhotonNetwork.Instantiate("Bullet", pointoffire.transform.position,
 					pointoffire.transform.rotation, 0);
-				cooldown = 3;
+				cooldown = 1;
 				
 			}
 		}
