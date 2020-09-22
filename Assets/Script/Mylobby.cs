@@ -13,6 +13,12 @@ public class Mylobby : MonoBehaviourPunCallbacks
 	public InputField ifName;
 	public GameObject required;
 	public PlayerName[] playersName;
+	public enum GameType
+	{
+		Tank,FPS
+	}
+	public GameType type;
+
 	//public GameObject namecontent;
 	// Start is called before the first frame update
 	void Start()
@@ -38,9 +44,19 @@ public class Mylobby : MonoBehaviourPunCallbacks
 			required.SetActive(true);
 		}
 	}
-	public void JoinRoom()
+	public void JoinRoomFPS()
 	{
-		PhotonNetwork.JoinRandomRoom();
+		type = GameType.FPS;
+		RoomOptions rOp = new RoomOptions();
+		rOp.MaxPlayers = 20;
+		PhotonNetwork.JoinOrCreateRoom("FPSRoom00", rOp, TypedLobby.Default, null);
+	}
+	public void JoinRoomTank()
+	{
+		type = GameType.Tank;
+		RoomOptions rOp = new RoomOptions();
+		rOp.MaxPlayers = 20;
+		PhotonNetwork.JoinOrCreateRoom("TankRoom00", rOp, TypedLobby.Default, null);
 	}
 	
 	public override void OnConnectedToMaster()
@@ -80,7 +96,15 @@ public class Mylobby : MonoBehaviourPunCallbacks
 			if (allready)
 			{
 				PhotonNetwork.CurrentRoom.IsOpen = false;
-				PhotonNetwork.LoadLevel("Level1");
+				switch (type)
+				{
+					case GameType.Tank:
+						PhotonNetwork.LoadLevel("Level1");
+						break;
+					case GameType.FPS:
+						PhotonNetwork.LoadLevel("Level2");
+						break;
+				}
 			}
 		}
 
